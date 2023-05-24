@@ -42,7 +42,7 @@ def train(model, data_loader, optimizer, epoch, device, config):
     metric_logger.add_meter('loss', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
 
     header = 'Train Epoch: [{}]'.format(epoch)
-    print_freq = 50
+    print_freq = config['print_freq']
     step_size = 10
 
     for i, (images, text, targets) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
