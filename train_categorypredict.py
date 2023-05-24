@@ -148,7 +148,8 @@ def main(args, config):
             cosine_lr_schedule(optimizer, epoch, config['max_epoch'], config['init_lr'], config['min_lr'])
 
             train_stats = train(model, train_loader, optimizer, epoch, device, config)
-
+            if 'mode' in config and config['mode'] == 'test':
+                break
         val_stats = evaluate(model, val_loader, device, config)
         test_stats = evaluate(model, test_loader, device, config)
 
