@@ -30,7 +30,10 @@ class CategoryPredictDataset(Dataset):
         ann = self.annotation.loc[index]
 
         image_path = os.path.join(ann['local_path'])
-        image = Image.open(image_path).convert('RGB')
+        try:
+            image = Image.open(image_path).convert('RGB')
+        except OSError:
+            return self.__getitem__(index-1)
         image = self.transform(image)
 
         sentence = pre_caption(ann['base_sku_name'], 40)
