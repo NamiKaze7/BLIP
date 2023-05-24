@@ -29,6 +29,8 @@ from models.blip_cls import blip_cls
 import utils
 from utils import cosine_lr_schedule, warmup_lr_schedule
 from data import create_dataset, create_sampler, create_loader
+import cv2
+cv2.setNumThreads(1)
 
 
 def train(model, data_loader, optimizer, epoch, device, config):
@@ -55,7 +57,6 @@ def train(model, data_loader, optimizer, epoch, device, config):
 
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
         metric_logger.update(loss=loss.item())
-        break
 
         # gather the stats from all processes
     metric_logger.synchronize_between_processes()
