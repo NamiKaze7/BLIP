@@ -67,7 +67,7 @@ def train(model, data_loader, optimizer, epoch, device, config):
 
 
 @torch.no_grad()
-def evaluate(model, data_loader, device, config):
+def evaluate(model, data_loader, device, args, epoch):
     # test
     model.eval()
 
@@ -75,6 +75,7 @@ def evaluate(model, data_loader, device, config):
 
     header = 'Evaluation:'
     print_freq = 50
+    ret = []
 
     for images, text, targets in metric_logger.log_every(data_loader, print_freq, header):
         images, targets = images.to(device), targets.to(device)
@@ -85,6 +86,10 @@ def evaluate(model, data_loader, device, config):
         accuracy = (targets == pred_class).sum() / targets.size(0)
 
         metric_logger.meters['acc'].update(accuracy.item(), n=images.size(0))
+        for i in range(len(text)):
+            ret.append({'text': text[i], 'pred': pred_class[i].item(), 'label': targets[i].item()})
+    with open(os.path.join(args.output_dir, f'test_res_{epoch}.pkl'),'wb') as f:
+        pickle.dump(ret, f)
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
@@ -150,8 +155,8 @@ def main(args, config):
             cosine_lr_schedule(optimizer, epoch, config['max_epoch'], config['init_lr'], config['min_lr'])
 
             train_stats = train(model, train_loader, optimizer, epoch, device, config)
-        val_stats = evaluate(model, val_loader, device, config)
-        test_stats = evaluate(model, test_loader, device, config)
+        val_stats = evaluate(model, val_loader, device, args, epoch)
+        test_stats = evaluate(model, test_loader, device, args, epoch)
 
         if utils.is_main_process():
             if args.evaluate:
