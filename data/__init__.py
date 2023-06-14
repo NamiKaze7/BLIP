@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.transforms.functional import InterpolationMode
 
+from data.classification_dataset import ClassificationDataset
 from data.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval, coco_karpathy_retrieval_eval
 from data.nocaps_dataset import nocaps_eval
 from data.flickr30k_dataset import flickr30k_train, flickr30k_retrieval_eval
@@ -76,6 +77,11 @@ def create_dataset(dataset, config, min_scale=0.5):
         train_dataset = CategoryPredictDataset(transform_train, config['ann_root'], config['c2i_root'], 'train')
         val_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'val')
         test_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'test')
+        return train_dataset, val_dataset, test_dataset
+    elif dataset == 'cls':
+        train_dataset = ClassificationDataset(transform_train, config['ann_root'], 'train')
+        val_dataset = ClassificationDataset(transform_test, config['ann_root'], 'val')
+        test_dataset = ClassificationDataset(transform_test, config['ann_root'], 'test')
         return train_dataset, val_dataset, test_dataset
 
 
