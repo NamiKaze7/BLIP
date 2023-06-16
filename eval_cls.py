@@ -78,8 +78,8 @@ def main(args, config):
         samplers = [None]
 
     test_loader = create_loader([test_dataset], samplers,
-                                batch_size=[config['batch_size']], num_workers=[4],
-                                is_trains=[False], collate_fns=[None])
+                                batch_size=[config['batch_size_test']], num_workers=[4],
+                                is_trains=[False], collate_fns=[None])[0]
 
     #### Model #### 
     print("Creating model")
@@ -95,20 +95,24 @@ def main(args, config):
         model_without_ddp = model.module
 
     test_result = evaluate(model_without_ddp, test_loader, device, config)
-    save_result(test_result, args.result_dir, 'test', remove_duplicate='image_id')
+    save_result(test_result, args.result_dir, 'test')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='./configs/eval_cls.yaml')
+    parser.add_argument('--config', default='./configs/cls.yaml')
     parser.add_argument('--output_dir', default='output/eval_cls')
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--world_size', default=1, type=int, help='number of distributed processes')
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
     parser.add_argument('--distributed', default=True, type=bool)
+    parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
 
+    if args.debug:
+        args.device = 'cpu'
+        args.distributed = False
     config = yaml.load(open(args.config, 'r'), Loader=yaml.Loader)
 
     args.result_dir = os.path.join(args.output_dir, 'result')
