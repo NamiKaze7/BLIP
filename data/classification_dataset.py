@@ -35,7 +35,7 @@ class ClassificationDataset(Dataset):
             return self.__getitem__(index-1)
         image = self.transform(image)
 
-        sentence = pre_caption(ann['text'], 40)
+        sentence = ann['text']
 
         label = int(ann['label'])
 

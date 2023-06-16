@@ -39,7 +39,8 @@ class BLIP_CLS(nn.Module):
         self.cls_head = nn.Sequential(
             nn.Linear(self.bert.config.hidden_size, self.bert.config.hidden_size),
             nn.ReLU(),
-            nn.Linear(self.bert.config.hidden_size, num_tags)
+            nn.Linear(self.bert.config.hidden_size, num_tags),
+            nn.Softmax()
         )
 
     def forward(self, image, text, targets, train=True):

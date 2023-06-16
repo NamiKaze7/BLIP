@@ -122,6 +122,6 @@ if __name__ == '__main__':
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     Path(args.result_dir).mkdir(parents=True, exist_ok=True)
 
-    yaml.dump(config, open(os.path.join(args.output_dir, 'config.yaml'), 'w'))
+    yaml.dump(config, open(os.path.join(args.result_dir, 'config.yaml'), 'w'))
 
     main(args, config)
