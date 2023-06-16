@@ -44,13 +44,15 @@ def evaluate(model, data_loader, device, config):
         text = list(text)
         prediction = model(images, text, targets=targets, train=False)
 
-        pred_score, pred_class = prediction.max(1)
+        confidence, pred_class = prediction.max(1)
+        pred_score = prediction[:, 1]
         accuracy = (targets == pred_class).sum() / targets.size(0)
 
         metric_logger.meters['acc'].update(accuracy.item(), n=images.size(0))
         for i in range(len(text)):
             ret.append({'text': text[i], 'pred': pred_class[i].item(),
-                        'label': targets[i].item(), 'pred_score': pred_score[i].item()})
+                        'label': targets[i].item(), 'pred_score': pred_score[i].item(),
+                        'confidence': confidence[i].items()})
     return ret
 
 
