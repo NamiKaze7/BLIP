@@ -83,6 +83,11 @@ def create_dataset(dataset, config, min_scale=0.5):
         val_dataset = ClassificationDataset(transform_test, config['ann_root'], 'val')
         test_dataset = ClassificationDataset(transform_test, config['ann_root'], 'test')
         return train_dataset, val_dataset, test_dataset
+    elif dataset == 'cls_eval':
+        #train_dataset = ClassificationDataset(transform_train, config['ann_root'], 'train')
+        #val_dataset = ClassificationDataset(transform_test, config['ann_root'], 'val')
+        test_dataset = ClassificationDataset(transform_test, config['ann_root'], 'test')
+        return test_dataset
 
 
 def create_sampler(datasets, shuffles, num_tasks, global_rank):

@@ -82,13 +82,14 @@ def evaluate(model, data_loader, device, args, epoch):
         text = list(text)
         prediction = model(images, text, targets=targets, train=False)
 
-        _, pred_class = prediction.max(1)
+        pred_score, pred_class = prediction.max(1)
         accuracy = (targets == pred_class).sum() / targets.size(0)
 
         metric_logger.meters['acc'].update(accuracy.item(), n=images.size(0))
         for i in range(len(text)):
-            ret.append({'text': text[i], 'pred': pred_class[i].item(), 'label': targets[i].item()})
-    with open(os.path.join(args.output_dir, f'test_res_{epoch}.pkl'),'wb') as f:
+            ret.append({'text': text[i], 'pred': pred_class[i].item(),
+                        'label': targets[i].item(), 'pred_score': pred_score[i].item()})
+    with open(os.path.join(args.output_dir, f'test_res_{epoch}.pkl'), 'wb') as f:
         pickle.dump(ret, f)
 
     # gather the stats from all processes
@@ -109,6 +110,7 @@ def main(args, config):
     np.random.seed(seed)
     random.seed(seed)
     cudnn.benchmark = True
+
 
     #### Dataset #### 
     print("Creating dataset")
