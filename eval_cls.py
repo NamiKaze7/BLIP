@@ -52,7 +52,7 @@ def evaluate(model, data_loader, device, config):
         for i in range(len(text)):
             ret.append({'text': text[i], 'pred': pred_class[i].item(),
                         'label': targets[i].item(), 'pred_score': pred_score[i].item(),
-                        'confidence': confidence[i].items()})
+                        'confidence': confidence[i].item()})
     return ret
 
 
