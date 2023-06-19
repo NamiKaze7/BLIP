@@ -39,8 +39,7 @@ class BLIP_CLS(nn.Module):
         self.cls_head = nn.Sequential(
             nn.Linear(self.bert.config.hidden_size, self.bert.config.hidden_size),
             nn.ReLU(),
-            nn.Linear(self.bert.config.hidden_size, num_tags),
-            nn.Softmax()
+            nn.Linear(self.bert.config.hidden_size, num_tags)
         )
 
     def forward(self, image, text, targets, train=True):
@@ -63,7 +62,7 @@ class BLIP_CLS(nn.Module):
             loss = F.cross_entropy(prediction, targets)
             return loss
         else:
-            return prediction
+            return torch.softmax(prediction, dim=-1)
 
 
 def blip_cls(pretrained='', **kwargs):
