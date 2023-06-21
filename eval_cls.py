@@ -39,7 +39,7 @@ def evaluate(model, data_loader, device, config):
     print_freq = 50
     ret = []
 
-    for images, text, targets in metric_logger.log_every(data_loader, print_freq, header):
+    for images, text, targets, group in metric_logger.log_every(data_loader, print_freq, header):
         images, targets = images.to(device), targets.to(device)
         text = list(text)
         prediction = model(images, text, targets=targets, train=False)
@@ -52,7 +52,7 @@ def evaluate(model, data_loader, device, config):
         for i in range(len(text)):
             ret.append({'text': text[i], 'pred': pred_class[i].item(),
                         'label': targets[i].item(), 'pred_score': pred_score[i].item(),
-                        'confidence': confidence[i].item()})
+                        'confidence': confidence[i].item(), 'group': group[i].item()})
     return ret
 
 
