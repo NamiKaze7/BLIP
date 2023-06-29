@@ -37,10 +37,11 @@ class ClassificationDataset(Dataset):
             except OSError:
                 return self.__getitem__(index - 1)
         else:
-            response = req.get(ann['pic_url'], stream=True)
+            url = re.sub("https://\w*?\.meituan.net/", "https://p.vip.sankuai.com/", ann['pic_url'])
+            response = req.get(url, stream=True)
             num = 0
             while response.status_code != 200:
-                response = req.get(ann['pic_url'], stream=True)
+                response = req.get(url, stream=True)
                 num += 1
                 if num == 20:
                     break
@@ -82,10 +83,11 @@ class ClassificationEvalDataset(Dataset):
             except OSError:
                 return self.__getitem__(index - 1)
         else:
-            response = req.get(ann['pic_url'], stream=True)
+            url = re.sub("https://\w*?\.meituan.net/", "https://p.vip.sankuai.com/", ann['pic_url'])
+            response = req.get(url, stream=True)
             num = 0
             while response.status_code != 200:
-                response = req.get(ann['pic_url'], stream=True)
+                response = req.get(url, stream=True)
                 num += 1
                 if num == 20:
                     break
