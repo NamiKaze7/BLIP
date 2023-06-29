@@ -1,7 +1,9 @@
 import os
 import json
-import pandas as pd
+from io import BytesIO
 
+import pandas as pd
+import requests as req
 from torch.utils.data import Dataset
 from PIL import Image
 
@@ -28,11 +30,22 @@ class ClassificationDataset(Dataset):
 
         ann = self.annotation.loc[index]
 
-        image_path = os.path.join(ann['local_path'])
-        try:
-            image = Image.open(image_path).convert('RGB')
-        except OSError:
-            return self.__getitem__(index - 1)
+        if 'local_path' in ann.columns:
+            image_path = os.path.join(ann['local_path'])
+            try:
+                image = Image.open(image_path).convert('RGB')
+            except OSError:
+                return self.__getitem__(index - 1)
+        else:
+            response = req.get(ann['pic_url'], stream=True)
+            num = 0
+            while response.status_code != 200:
+                response = req.get(ann['pic_url'], stream=True)
+                num += 1
+                if num == 20:
+                    break
+            image = Image.open(BytesIO(response.content))
+            image = image.convert('RGB') if image.mode != 'RGB' else image
         image = self.transform(image)
 
         sentence = ann['text']
@@ -62,11 +75,23 @@ class ClassificationEvalDataset(Dataset):
 
         ann = self.annotation.loc[index]
 
-        image_path = os.path.join(ann['local_path'])
-        try:
-            image = Image.open(image_path).convert('RGB')
-        except OSError:
-            return self.__getitem__(index - 1)
+        if 'local_path' in ann.columns:
+            image_path = os.path.join(ann['local_path'])
+            try:
+                image = Image.open(image_path).convert('RGB')
+            except OSError:
+                return self.__getitem__(index - 1)
+        else:
+            response = req.get(ann['pic_url'], stream=True)
+            num = 0
+            while response.status_code != 200:
+                response = req.get(ann['pic_url'], stream=True)
+                num += 1
+                if num == 20:
+                    break
+            image = Image.open(BytesIO(response.content))
+            image = image.convert('RGB') if image.mode != 'RGB' else image
+
         image = self.transform(image)
 
         sentence = ann['text']
