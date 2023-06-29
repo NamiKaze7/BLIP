@@ -31,7 +31,7 @@ class ClassificationDataset(Dataset):
 
         ann = self.annotation.loc[index]
 
-        if 'local_path' in ann.columns:
+        if 'local_path' in ann:
             image_path = os.path.join(ann['local_path'])
             try:
                 image = Image.open(image_path).convert('RGB')
@@ -77,7 +77,7 @@ class ClassificationEvalDataset(Dataset):
 
         ann = self.annotation.loc[index]
 
-        if 'local_path' in ann.columns:
+        if 'local_path' in ann:
             image_path = os.path.join(ann['local_path'])
             try:
                 image = Image.open(image_path).convert('RGB')
