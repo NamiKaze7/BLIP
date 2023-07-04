@@ -78,6 +78,11 @@ def create_dataset(dataset, config, min_scale=0.5):
         val_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'val')
         test_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'test')
         return train_dataset, val_dataset, test_dataset
+    elif dataset == 'category_predict_eval':
+        # train_dataset = CategoryPredictDataset(transform_train, config['ann_root'], config['c2i_root'], 'train')
+        # val_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'val')
+        test_dataset = CategoryPredictDataset(transform_test, config['ann_root'], config['c2i_root'], 'test')
+        return test_dataset
     elif dataset == 'cls':
         train_dataset = ClassificationDataset(transform_train, config['ann_root'], 'train')
         val_dataset = ClassificationDataset(transform_test, config['ann_root'], 'val')
