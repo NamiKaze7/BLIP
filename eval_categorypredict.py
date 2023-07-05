@@ -58,8 +58,8 @@ def evaluate(model, data_loader, device, config):
 
         metric_logger.meters['acc'].update(accuracy.item(), n=images.size(0))
 
-        probs = top_values.detach().numpy().tolist()
-        cate_ids = top_indices.detach().numpy().tolist()
+        probs = top_values.detach().cpu().numpy().tolist()
+        cate_ids = top_indices.detach().cpu().numpy().tolist()
         for i in range(len(text)):
             item_dict = test_df.loc[idx].to_dict()
             item_dict.update({'text': text[i], 'pred': pred_class[i].item(),
