@@ -62,13 +62,15 @@ def evaluate(model, data_loader, device, config):
         cate_ids = top_indices.detach().cpu().numpy().tolist()
         for i in range(len(text)):
             item_dict = test_df.loc[idx].to_dict()
+            idx += 1
             item_dict.update({'text': text[i], 'pred': pred_class[i].item(),
                               'label': targets[i].item()})
             top_k_prob = probs[i]
             top_k_cate = cate_ids[i]
             for kidx in range(len(top_k_cate)):
-                item_dict.update({f'p_category_name{kidx}': id2category[top_k_cate[kidx]],
+                item_dict.update({f'p_category_name{kidx+1}': id2category[top_k_cate[kidx]],
                                   f'prob{kidx}': top_k_prob[kidx]})
+
 
             ret.append(item_dict)
     return ret
