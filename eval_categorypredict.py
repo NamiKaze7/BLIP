@@ -66,7 +66,7 @@ def evaluate(model, data_loader, device, config):
                               'label': targets[i].item()})
             top_k_prob = probs[i]
             top_k_cate = cate_ids[i]
-            for kidx in len(top_k_cate):
+            for kidx in range(len(top_k_cate)):
                 item_dict.update({f'p_category_name{kidx}': category2name[id2category[top_k_cate[kidx]]],
                                   f'prob{kidx}': top_k_prob[kidx]})
 
