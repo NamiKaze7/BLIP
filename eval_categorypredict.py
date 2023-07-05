@@ -39,7 +39,7 @@ def evaluate(model, data_loader, device, config):
     id2category = {}
     for k,v in category2id.items():
         id2category[v] = k
-    category2name = json.load(open(config['c2n_root']))
+    #category2name = json.load(open(config['c2n_root']))
     metric_logger = utils.MetricLogger(delimiter="  ")
 
     header = 'Evaluation:'
@@ -67,7 +67,7 @@ def evaluate(model, data_loader, device, config):
             top_k_prob = probs[i]
             top_k_cate = cate_ids[i]
             for kidx in range(len(top_k_cate)):
-                item_dict.update({f'p_category_name{kidx}': category2name[id2category[top_k_cate[kidx]]],
+                item_dict.update({f'p_category_name{kidx}': id2category[top_k_cate[kidx]],
                                   f'prob{kidx}': top_k_prob[kidx]})
 
             ret.append(item_dict)
