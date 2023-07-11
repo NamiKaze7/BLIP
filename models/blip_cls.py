@@ -61,7 +61,7 @@ class BLIP_CLS(nn.Module):
         prediction = self.cls_head(hidden_state)
 
         if train:
-            loss = F.cross_entropy(prediction, targets)
+            loss = self.loss(prediction, targets)
             return loss
         else:
             return torch.softmax(prediction, dim=-1)
