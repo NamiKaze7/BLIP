@@ -21,7 +21,8 @@ class BLIP_CLS(nn.Module):
                  vit='base',
                  vit_grad_ckpt=False,
                  vit_ckpt_layer=0,
-                 num_tags=2
+                 num_tags=2,
+                 label_smoothing=0.1
                  ):
         """
         Args:
@@ -41,6 +42,7 @@ class BLIP_CLS(nn.Module):
             nn.ReLU(),
             nn.Linear(self.bert.config.hidden_size, num_tags)
         )
+        self.loss = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
 
     def forward(self, image, text, targets, train=True):
 
