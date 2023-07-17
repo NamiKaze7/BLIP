@@ -68,8 +68,8 @@ def evaluate(model, data_loader, device, config):
             top_k_prob = probs[i]
             top_k_cate = cate_ids[i]
             for kidx in range(len(top_k_cate)):
-                item_dict.update({f'p_category_name{kidx+1}': id2category[top_k_cate[kidx]],
-                                  f'prob{kidx}': top_k_prob[kidx]})
+                item_dict.update({f'p_category_name{kidx+1}_mm': id2category[top_k_cate[kidx]],
+                                  f'probability{kidx+1}': top_k_prob[kidx]})
 
 
             ret.append(item_dict)

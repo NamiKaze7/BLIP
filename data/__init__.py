@@ -91,7 +91,8 @@ def create_dataset(dataset, config, min_scale=0.5):
     elif dataset == 'cls_eval':
         #train_dataset = ClassificationDataset(transform_train, config['ann_root'], 'train')
         #val_dataset = ClassificationDataset(transform_test, config['ann_root'], 'val')
-        test_dataset = ClassificationEvalDataset(transform_test, config['ann_root'], 'test')
+        test_dataset = ClassificationEvalDataset(
+            transform_test, config['ann_root'], 'test' if 'file_name' not in config else config['file_name'])
         return test_dataset
 
 
