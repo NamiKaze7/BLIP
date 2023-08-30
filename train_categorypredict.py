@@ -124,9 +124,10 @@ def main(args, config):
 
     #### Model #### 
     print("Creating model")
+    config['num_tags'] = len(category2id)
     model = blip_cls(pretrained=config['pretrained'], image_size=config['image_size'],
                      vit=config['vit'], vit_grad_ckpt=config['vit_grad_ckpt'], vit_ckpt_layer=config['vit_ckpt_layer'],
-                     num_tags=len(category2id), bert_dir=config['bert_dir'])
+                     num_tags=config['num_tags'], bert_dir=config['bert_dir'])
 
     model = model.to(device)
 
