@@ -49,14 +49,14 @@ class BLIP_CLS(nn.Module, MomentumDistilationMixin):
             nn.Linear(self.bert.config.hidden_size, num_tags)
         )
         self.loss = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
+        self.momentum = momentum
+        self.alpha = alpha
 
+    def init_md(self):
         if self.use_distill:
             self.visual_encoder_m = deepcopy(self.visual_encoder)
             self.text_encoder_m = deepcopy(self.bert)
             self.cls_head_m = deepcopy(self.cls_head)
-
-            self.momentum = momentum
-            self.alpha = alpha
 
             self.model_pairs = [
                 [self.visual_encoder, self.visual_encoder_m],
@@ -149,5 +149,6 @@ def load_checkpoint(model, url_or_filename):
             state_dict[new_key1] = state_dict[key]
 
     msg = model.load_state_dict(state_dict, strict=False)
+    model.init_md()
     print('load checkpoint from %s' % url_or_filename)
     return model, msg
