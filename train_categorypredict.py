@@ -127,7 +127,7 @@ def main(args, config):
     config['num_tags'] = len(category2id)
     model = blip_cls(pretrained=config['pretrained'], image_size=config['image_size'],
                      vit=config['vit'], vit_grad_ckpt=config['vit_grad_ckpt'], vit_ckpt_layer=config['vit_ckpt_layer'],
-                     num_tags=config['num_tags'], bert_dir=config['bert_dir'])
+                     num_tags=config['num_tags'], bert_dir=config['bert_dir'], use_distill=True if 'use_distill' in config else False)
 
     model = model.to(device)
 
