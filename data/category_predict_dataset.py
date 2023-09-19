@@ -36,7 +36,7 @@ class CategoryPredictDataset(Dataset):
             return self.__getitem__(index-1)
         image = self.transform(image)
 
-        sentence = ann['base_sku_name']
+        sentence = pre_caption(ann['base_sku_name'], 40)
 
         label = int(self.category2id[ann['category_name']])
 
