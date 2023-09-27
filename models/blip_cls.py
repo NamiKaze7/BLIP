@@ -41,7 +41,10 @@ class BLIP_CLS(nn.Module, MomentumDistilationMixin):
         self.visual_encoder, vision_width = create_vit(vit, image_size, vit_grad_ckpt, vit_ckpt_layer,
                                                        drop_path_rate=0.1)
         self.bert = AutoModel.from_pretrained(bert_dir)
-        self.tokenizer = AutoTokenizer.from_pretrained(bert_dir)
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(bert_dir)
+        except KeyError:
+            self.tokenizer = BertTokenizer.from_pretrained(bert_dir)
 
         self.cls_head = nn.Sequential(
             nn.Linear(self.bert.config.hidden_size, self.bert.config.hidden_size),
